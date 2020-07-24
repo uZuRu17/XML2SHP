@@ -9451,7 +9451,7 @@ public partial class CGXML : global::System.Data.DataSet
                 }
                 catch (global::System.InvalidCastException e)
                 {
-                    throw new global::System.Data.StrongTypingException("The value for column \'BUILDINGID\' in table \'BuildingCommonParts\' is DBNull.", e);
+                    return 9898989;
                 }
             }
             set
