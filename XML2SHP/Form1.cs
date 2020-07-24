@@ -43,6 +43,7 @@ namespace XML2SHP
             int intr = 0;
             //Create a future list
             IList<Feature> futuresList = new List<Feature>();
+            IList<Feature> CladirifuturesList = new List<Feature>();
 
             //browse
             string filePath = textBox1.Text;
@@ -71,9 +72,50 @@ namespace XML2SHP
 
                 //create geometry factory
                 GeometryFactory geomFactory = NtsGeometryServices.Instance.CreateGeometryFactory();
+                GeometryFactory fabricaGeometri = NtsGeometryServices.Instance.CreateGeometryFactory();
                 Geometry[] gr = new Geometry[nrCGXML];
+                List<Geometry> geometrieCladiri = new List<Geometry>();
+
+                Dictionary<int, List<Coordinate>> BCoordinates = new Dictionary<int, List<Coordinate>>();
+
+                foreach (CGXML.PointsRow pr in fisier.Points)
+                {
+                    if (pr.BuildingRow == null) continue;
+                    if (!BCoordinates.ContainsKey(pr.BUILDINGID))
+                    {
+                        BCoordinates.Add(pr.BUILDINGID, new List<Coordinate>());
+                    }
+                    else
+                    {
+                        BCoordinates[pr.BUILDINGID].Add(new Coordinate(pr.X, pr.Y));
+                    }
+
+                }
+                int indexCladire = 0;
                 foreach (CGXML.LandRow lr in fisier.Land)
                 {
+                   // List<Coordinate> bCoord = new List<Coordinate>();
+                    foreach (CGXML.BuildingRow br in fisier.Building)
+                    {
+                        AttributesTable Btable = new AttributesTable();
+                        Btable.Add(futureFieldSector, lr.CADSECTOR);
+                        Btable.Add(futureFieldName, lr.CADGENNO);
+                        Btable.Add("nrCladire", br.BUILDNO);
+                        Btable.Add("destCladire", br.BUILDINGDESTINATION);
+
+                        //Geometry 
+                        //bCoord = bCoord.Where(c => c != null).ToArray();
+                        if(BCoordinates[indexCladire+1].First() != BCoordinates[indexCladire+1].Last())
+                        {
+                            BCoordinates[indexCladire+1].Add(BCoordinates[indexCladire+1].First());
+                        }
+                        geometrieCladiri.Add(fabricaGeometri.CreatePolygon(BCoordinates[indexCladire+1].ToArray()));
+                        //gr[indexCladire] = geomFactory.CreatePolygon(  BCoordinates[indexCladire].ToArray());
+                        CladirifuturesList.Add(new Feature(geometrieCladiri[indexCladire], Btable));
+                        indexCladire++;
+                    }    
+                    
+
                     var r = 0;
                     string Person = "";
                     var q = 0;
@@ -161,13 +203,23 @@ namespace XML2SHP
                     futuresList.Add(new Feature(gr[intr], t));
                     intr++;
                 }
+                indexCladire = 0;
             }
+            
             //Feature list
             IList<Feature> features = futuresList.OfType<Feature>().ToList();
             string shapefile = string.Concat(filePath, "\\", "Imobile");
             ShapefileDataWriter writer = new ShapefileDataWriter(shapefile) { Header = ShapefileDataWriter.GetHeader(features[0], features.Count) };
 
             writer.Write(features);
+
+            //Cladiri Feature list
+            IList<Feature> Cladirifeatures = CladirifuturesList.OfType<Feature>().ToList();
+            string Cladirishapefile = string.Concat(filePath, "\\", "Cladiri");
+            ShapefileDataWriter Cladiriwriter = new ShapefileDataWriter(shapefile) { Header = ShapefileDataWriter.GetHeader(Cladirifeatures[0], Cladirifeatures.Count) };
+
+            Cladiriwriter.Write(Cladirifeatures);
+
         }
     }
 }

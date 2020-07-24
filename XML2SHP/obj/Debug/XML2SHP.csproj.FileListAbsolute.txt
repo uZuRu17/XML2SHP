@@ -16,7 +16,6 @@ C:\Users\admin\source\repos\XML2SHP\XML2SHP\bin\Debug\System.Buffers.xml
 C:\Users\admin\source\repos\XML2SHP\XML2SHP\bin\Debug\System.Memory.xml
 C:\Users\admin\source\repos\XML2SHP\XML2SHP\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\admin\source\repos\XML2SHP\XML2SHP\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
-C:\Users\admin\source\repos\XML2SHP\XML2SHP\obj\Debug\XML2SHP.csprojAssemblyReference.cache
 C:\Users\admin\source\repos\XML2SHP\XML2SHP\obj\Debug\XML2SHP.Form1.resources
 C:\Users\admin\source\repos\XML2SHP\XML2SHP\obj\Debug\XML2SHP.Properties.Resources.resources
 C:\Users\admin\source\repos\XML2SHP\XML2SHP\obj\Debug\XML2SHP.csproj.GenerateResource.cache
